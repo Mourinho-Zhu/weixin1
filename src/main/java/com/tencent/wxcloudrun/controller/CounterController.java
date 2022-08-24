@@ -136,18 +136,18 @@ public class CounterController {
       switch(content) {
         case "纪念日":
         case "1":
-          content = getCommemorationDayText();
+          replyContent = getCommemorationDayText();
           break;
         case "猪猪":
         case "2":
-          content = "猪猪哼哼哼哼";
+          replyContent = "猪猪哼哼哼哼";
           break;
         case "猫猫":
         case "3":
-          content = "猫猫喵喵喵喵";
+          replyContent = "猫猫喵喵喵喵";
           break;
         default:
-          content = "猪猪很笨的，还不会这个问题嗷";
+          replyContent = "猪猪很笨的，还不会这个问题嗷";
           break;                    
       }
 
@@ -238,7 +238,7 @@ public class CounterController {
     LocalDate today = LocalDate.now();
     LocalDate weddingDay = LocalDate.of(2020,11,4);
     long diffDay = today.toEpochDay() - weddingDay.toEpochDay();
-    return "今天是我们恋爱的 " + diffDay + " 天";
+    return "今天是我们认识的第 " + diffDay + " 天";
   }
 
   String getWeddingDayText() {
@@ -256,6 +256,7 @@ public class CounterController {
       birthDay = LocalDate.of(year + 1,11,8);
     }
     long diffDay = birthDay.toEpochDay() - today.toEpochDay();
+    if(diffDay == 0) return "今天是猫猫的生日，祝猫猫生日快乐!";
     return "距你的生日还有 " + diffDay + " 天";
   }
 }
