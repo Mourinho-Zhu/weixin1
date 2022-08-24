@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.controller;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.tencent.wxcloudrun.config.ApiResponse;
@@ -7,14 +8,31 @@ import com.tencent.wxcloudrun.dto.CounterRequest;
 import com.tencent.wxcloudrun.model.Counter;
 import com.tencent.wxcloudrun.service.CounterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.Document;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * counter控制器
@@ -85,9 +103,30 @@ public class CounterController {
    * @return API response json
    */
   @PostMapping(value = "/api/wx")
-  ApiResponse createWx(@RequestBody CounterRequest request) {
-    logger.info("/api/wx post request, action: {}", request.getAction());
+  ApiResponse createWx(HttpServletRequest request) {
+    try {
+      String body = getBodytxt(request);
+      logger.info("/api/wx post request, action: {}",body);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     return ApiResponse.ok(0);
   }
+
+
+  String getBodytxt(HttpServletRequest request) {
+    String str, wholeStr = "";
+    try {
+      BufferedReader br = request.getReader();
+ 
+      while((str = br.readLine()) != null){
+        wholeStr += str;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return wholeStr;
+  }
+
 }
