@@ -79,5 +79,14 @@ public class CounterController {
       return ApiResponse.error("参数action错误");
     }
   }
-  
+
+  /**
+   * 获取当前计数
+   * @return API response json
+   */
+  @GetMapping(value = "/api/wx")
+  ApiResponse getWx() {
+    logger.info("/api/wx get request");
+    return ApiResponse.ok(0);
+  }
 }
