@@ -1,5 +1,6 @@
 package com.tencent.wxcloudrun.controller;
 
+import org.apache.ibatis.cache.decorators.WeakCache;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -111,7 +112,7 @@ public class CounterController {
    * @return API response json
    */
   @PostMapping(value = "/api/wx")
-  ApiResponse createWx(HttpServletRequest request) {
+  public String createWx(HttpServletRequest request) {
     try {
       String body = getBodytxt(request);
       logger.info("/api/wx post request, action: {}",body);
@@ -136,13 +137,12 @@ public class CounterController {
       reply.put(TYPE, "text");
       reply.put(CONTENT, content + "123");
       logger.info("reply " + reply);
-      ApiResponse.ok(reply);
-
+      return reply.toString();
     } catch (Exception e) {
       e.printStackTrace();
     }
 
-    return ApiResponse.ok(0);
+    return "";
   }
 
 
