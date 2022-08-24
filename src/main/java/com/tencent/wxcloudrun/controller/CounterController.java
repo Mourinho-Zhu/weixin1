@@ -98,6 +98,14 @@ public class CounterController {
     }
   }
 
+
+
+  private static final String FROM_USER_NAME = "FromUserName";
+  private static final String TO_USER_NAME = "ToUserName";
+  private static final String CONTENT = "Content";
+  private static final String TYPE = "MsgType";
+  private static final String TIME = "CreateTime";
+
   /**
    * 获取公众号信息
    * @return API response json
@@ -107,6 +115,28 @@ public class CounterController {
     try {
       String body = getBodytxt(request);
       logger.info("/api/wx post request, action: {}",body);
+      JSONObject jsonObject = new JSONObject(body);
+      //用户id
+      String from = jsonObject.getString(FROM_USER_NAME);
+      //公众号id
+      String to = jsonObject.getString(TO_USER_NAME);
+      //内容
+      String content = jsonObject.getString(CONTENT);
+      //type
+      String type = jsonObject.getString(TYPE);
+
+      logger.info("from: " + from + ",to: " + to + " ,content:" + content + ", type = " + type);
+      
+
+      JSONObject reply = new JSONObject();
+      reply.put(FROM_USER_NAME, to);
+      reply.put(TO_USER_NAME, from);
+      reply.put(TIME, System.currentTimeMillis() / 1000);
+      reply.put(TYPE, "text");
+      reply.put(CONTENT, content + "123");
+      logger.info("reply " + reply);
+      ApiResponse.ok(reply);
+
     } catch (Exception e) {
       e.printStackTrace();
     }
