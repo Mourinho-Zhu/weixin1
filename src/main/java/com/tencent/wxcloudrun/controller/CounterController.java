@@ -81,12 +81,13 @@ public class CounterController {
   }
 
   /**
-   * 获取当前计数
+   * 获取公众号信息
    * @return API response json
    */
-  @GetMapping(value = "/api/wx")
-  ApiResponse getWx() {
-    logger.info("/api/wx get request");
+  @PostMapping(value = "/api/wx")
+  ApiResponse createWx(@RequestBody CounterRequest request) {
+    logger.info("/api/wx post request, action: {}", request.getAction());
+
     return ApiResponse.ok(0);
   }
 }
