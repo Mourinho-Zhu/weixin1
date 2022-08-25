@@ -281,6 +281,7 @@ public class CounterController {
   private static final List<String> mPikaMaoMediaIdList = new ArrayList<>();
   private static final List<String> mDaPiMaoMediaIdList = new ArrayList<>();
   private static final List<String> mXiaoMaomiMediaIdList = new ArrayList<>();
+  private static final List<String> mLanMaoMediaIdList = new ArrayList<>();
 
   private static final String DA_PI_MAO = "大屁猫";
   private static final String CHAN_MAO = "馋猫";
@@ -322,6 +323,15 @@ public class CounterController {
 
     //小猫咪
     mXiaoMaomiMediaIdList.add("Fqbf5z1cZh_UYBc_M1YfPnQe8yQo5lJ5ismgXy8OsQKa4sEWVpPo0NPFcQLF_J-E");
+    mXiaoMaomiMediaIdList.add("odIJHwiJ_nC4Sfu-aEU_k6ROzq-WulBqxfXR8vswJILz3a8lHhj5y6tSAxqkC05M");
+    mXiaoMaomiMediaIdList.add("odIJHwiJ_nC4Sfu-aEU_k7bCf9vMU-9D_gUPjLHL0sH19-PxVMoYRp8YC4jynrXo");
+    mXiaoMaomiMediaIdList.add("odIJHwiJ_nC4Sfu-aEU_kx82fCOq9hIwogPS4-oRQboYzRYZu6z5JXqSJ_fYzCX");
+    mXiaoMaomiMediaIdList.add("odIJHwiJ_nC4Sfu-aEU_k9uAGH2gA6MrGWyqXWjHlY6726k4rECZ01vtSeWet217");
+
+    //懒猫
+    mLanMaoMediaIdList.add("odIJHwiJ_nC4Sfu-aEU_k3Y24EQudy0AyxVIMaGAqJigDCAtGHBXCX48nIHKUtt_");
+    mLanMaoMediaIdList.add("odIJHwiJ_nC4Sfu-aEU_k-cuLFmTAxAXMwAX57HVOcFXwOpRigqwesQVfvnQkMWC");
+    mLanMaoMediaIdList.add("odIJHwiJ_nC4Sfu-aEU_kxROYlrxfMxEsbne9Udh4XcGSodXZhhI0AHSkxwG4hN_");
 
 
   }
@@ -331,6 +341,10 @@ public class CounterController {
     switch(content) {
       case DA_PI_MAO:
       mediaId = getRandomMediaId(mDaPiMaoMediaIdList);
+        break;
+      case LAN_MAO:
+      case XIAO_LAN_MAO:
+        mediaId = getRandomMediaId(mLanMaoMediaIdList);
         break;
       case CHAN_MAO:
       case XIAO_CHAN_MAO:
