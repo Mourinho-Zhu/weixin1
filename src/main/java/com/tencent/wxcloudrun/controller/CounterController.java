@@ -278,6 +278,9 @@ public class CounterController {
   private static final List<String> mImageKeywordList = new ArrayList<>();
   private static final List<String> mChanMaoMediaIdList = new ArrayList<>();
   private static final List<String> mXiaoZhuZhuMediaIdList = new ArrayList<>();
+  private static final List<String> mPikaMaoMediaIdList = new ArrayList<>();
+  private static final List<String> mDaPiMaoMediaIdList = new ArrayList<>();
+  private static final List<String> mXiaoMaomiMediaIdList = new ArrayList<>();
 
   private static final String DA_PI_MAO = "大屁猫";
   private static final String CHAN_MAO = "馋猫";
@@ -286,6 +289,7 @@ public class CounterController {
   private static final String XIAO_LAN_MAO = "小懒猫";
   private static final String LAN_MAO = "懒猫";
   private static final String XIAO_ZHU_ZHU = "小猪猪";
+  private static final String XIAO_MAO_MI = "小猫咪";
 
   static {
     mImageKeywordList.add(DA_PI_MAO);
@@ -308,6 +312,15 @@ public class CounterController {
     mXiaoZhuZhuMediaIdList.add("Fqbf5z1cZh_UYBc_M1YfPt6o_7YUhJzhIvX3qHKq-LFN_MnmZf_1rWMfULAL4ouY");
     mXiaoZhuZhuMediaIdList.add("Fqbf5z1cZh_UYBc_M1YfPlLjuJWmnRMDFLQEMsg4QklKsGfPYF2b9I7pQcs4ynLH");
 
+    //皮卡猫
+    mPikaMaoMediaIdList.add("Uqr_FN07KQF_j-eLL1GCno8Ifulw8wybn1ZFts0A-ofOuXirx-gon5F7izi-BywM");
+
+
+    //大屁猫
+    mDaPiMaoMediaIdList.add("og9uZrJ4VLOt3kLhu_AuIDgU4_HTAnlBVDmIJXiXtaiEDlLrt7ZkpXnxN6l432YF");
+
+    //小猫咪
+    mXiaoMaomiMediaIdList.add("Fqbf5z1cZh_UYBc_M1YfPnQe8yQo5lJ5ismgXy8OsQKa4sEWVpPo0NPFcQLF_J-E");
 
 
   }
@@ -316,18 +329,22 @@ public class CounterController {
     String mediaId = "";
     switch(content) {
       case DA_PI_MAO:
-        mediaId = "og9uZrJ4VLOt3kLhu_AuIDgU4_HTAnlBVDmIJXiXtaiEDlLrt7ZkpXnxN6l432YF";
+      mediaId = getRandomMediaId(mDaPiMaoMediaIdList);
         break;
       case CHAN_MAO:
       case XIAO_CHAN_MAO:
         mediaId = getRandomMediaId(mChanMaoMediaIdList);
         break;
       case PI_KA_MAO:
-        mediaId = "Uqr_FN07KQF_j-eLL1GCno8Ifulw8wybn1ZFts0A-ofOuXirx-gon5F7izi-BywM";     
+        mediaId = getRandomMediaId(mPikaMaoMediaIdList);     
         break;
       case XIAO_ZHU_ZHU :
         mediaId = getRandomMediaId(mXiaoZhuZhuMediaIdList);
         break;
+      case XIAO_MAO_MI :
+        mediaId = getRandomMediaId(mXiaoMaomiMediaIdList);
+        break;
+
       default:
         return "";                  
     }
