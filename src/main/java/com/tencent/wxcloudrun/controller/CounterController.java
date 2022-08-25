@@ -298,7 +298,8 @@ public class CounterController {
     mImageKeywordList.add(PI_KA_MAO);
     mImageKeywordList.add(XIAO_LAN_MAO);
     mImageKeywordList.add(LAN_MAO);    
-    mImageKeywordList.add(XIAO_ZHU_ZHU);    
+    mImageKeywordList.add(XIAO_ZHU_ZHU);  
+    mImageKeywordList.add(XIAO_MAO_MI);    
 
     //馋猫
     mChanMaoMediaIdList.add("og9uZrJ4VLOt3kLhu_AuIF0FnayrYoQ5aF0UT1EL-YP3Bg2fPXVK9TQTyinnXeDc");
