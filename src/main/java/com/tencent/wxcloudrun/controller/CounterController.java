@@ -431,9 +431,10 @@ public class CounterController {
     image.put("Title", content);
     image.put("Description", imageReplyBean.text);
     image.put("PicUrl", imageReplyBean.url);
-    image.put("ArticleCount", 1);
+   
     image.put("Url", imageReplyBean.url);
     imageArr.put(image);
+    reply.put("ArticleCount", 1);
     reply.put("Articles", imageArr);
     logger.info("reply " + reply);
     return reply.toString();
