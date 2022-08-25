@@ -27,12 +27,14 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.text.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,7 +110,10 @@ public class CounterController {
   private static final String CONTENT = "Content";
   private static final String TYPE = "MsgType";
   private static final String TIME = "CreateTime";
+  private static final String IMAGE = "Image";
+  private static final String MEDIA_ID = "MediaId";
   
+
 
   /**
    * 获取公众号信息
@@ -132,33 +137,14 @@ public class CounterController {
 
       logger.info("from: " + from + ",to: " + to + " ,content:" + content + ", type = " + type);
       if(content == null || "".equals(content)) return "";
-      String replyContent = "";
-      switch(content) {
-        case "纪念日":
-        case "1":
-          replyContent = getCommemorationDayText();
-          break;
-        case "猪猪":
-        case "2":
-          replyContent = "猪猪哼哼哼哼";
-          break;
-        case "猫猫":
-        case "3":
-          replyContent = "猫猫喵喵喵喵";
-          break;
-        default:
-          replyContent = "猪猪很笨的，还不会这个问题嗷";
-          break;                    
+
+      if(mImageKeywordList.contains(content)) {
+        return getImageReply(from,to,content);
+      } else {
+        return getTextReply(from, to,content);
       }
 
-      JSONObject reply = new JSONObject();
-      reply.put(FROM_USER_NAME, to);
-      reply.put(TO_USER_NAME, from);
-      reply.put(TIME, System.currentTimeMillis() / 1000);
-      reply.put(TYPE, "text");
-      reply.put(CONTENT, replyContent);
-      logger.info("reply " + reply);
-      return reply.toString();
+
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -166,6 +152,34 @@ public class CounterController {
     return "";
   }
 
+  private String getTextReply(String from,String to,String content) {
+    String replyContent = "";
+    switch(content) {
+      case "纪念日":
+      case "1":
+        replyContent = getCommemorationDayText();
+        break;
+      case "猪猪":
+      case "2":
+        replyContent = "猪猪哼哼哼哼";
+        break;
+      case "猫猫":
+      case "3":
+        replyContent = "猫猫喵喵喵喵";
+        break;
+      default:
+        replyContent = "猪猪很笨的，还不会这个问题嗷";
+        break;                    
+    }
+    JSONObject reply = new JSONObject();
+    reply.put(FROM_USER_NAME, to);
+    reply.put(TO_USER_NAME, from);
+    reply.put(TIME, System.currentTimeMillis() / 1000);
+    reply.put(TYPE, "text");
+    reply.put(CONTENT, replyContent);
+    logger.info("reply " + reply);
+    return reply.toString();
+  }
 
   String getBodytxt(HttpServletRequest request) {
     String str, wholeStr = "";
@@ -258,5 +272,80 @@ public class CounterController {
     long diffDay = birthDay.toEpochDay() - today.toEpochDay();
     if(diffDay == 0) return "今天是猫猫的生日，祝猫猫生日快乐!";
     return "距你的生日还有 " + diffDay + " 天";
+  }
+
+
+  private static final List<String> mImageKeywordList = new ArrayList<>();
+  private static final List<String> mChanMaoMediaIdList = new ArrayList<>();
+  private static final List<String> mXiaoZhuZhuMediaIdList = new ArrayList<>();
+
+  private static final String DA_PI_MAO = "大屁猫";
+  private static final String CHAN_MAO = "馋猫";
+  private static final String XIAO_CHAN_MAO = "小馋猫";
+  private static final String PI_KA_MAO = "皮卡猫";
+  private static final String XIAO_LAN_MAO = "小懒猫";
+  private static final String LAN_MAO = "懒猫";
+  private static final String XIAO_ZHU_ZHU = "小猪猪";
+
+  static {
+    mImageKeywordList.add(DA_PI_MAO);
+    mImageKeywordList.add(CHAN_MAO);
+    mImageKeywordList.add(XIAO_CHAN_MAO);
+    mImageKeywordList.add(PI_KA_MAO);
+    mImageKeywordList.add(XIAO_LAN_MAO);
+    mImageKeywordList.add(LAN_MAO);    
+    mImageKeywordList.add(XIAO_ZHU_ZHU);    
+
+    //馋猫
+    mChanMaoMediaIdList.add("og9uZrJ4VLOt3kLhu_AuIF0FnayrYoQ5aF0UT1EL-YP3Bg2fPXVK9TQTyinnXeDc");
+    mChanMaoMediaIdList.add("Fqbf5z1cZh_UYBc_M1YfPnHqnpPG75t3JD2GHHQvdat52rVgZJOa_AMb_UdLfo4Y");
+    mChanMaoMediaIdList.add("Fqbf5z1cZh_UYBc_M1YfPtJ7fqM5EQxVlH2quhdIWUFJRN0J2Ka59kdky2LDRavA");
+    mChanMaoMediaIdList.add("Fqbf5z1cZh_UYBc_M1YfPkq7-E0g04TMAguaEYNSkN-Pe0cNPJz6tBsrp5iO_OQS");
+    mChanMaoMediaIdList.add("Fqbf5z1cZh_UYBc_M1YfPvrEkZK-9NM3IQt-AAK8-ppzbBYg12ma2_C44KIhAYfm");
+
+    //小猪猪
+    mXiaoZhuZhuMediaIdList.add("Fqbf5z1cZh_UYBc_M1YfPi7lyHJOutaX70fdRSd7UwMBgEvuEJaD6BQvE1Upq-tR");
+    mXiaoZhuZhuMediaIdList.add("Fqbf5z1cZh_UYBc_M1YfPt6o_7YUhJzhIvX3qHKq-LFN_MnmZf_1rWMfULAL4ouY");
+    mXiaoZhuZhuMediaIdList.add("Fqbf5z1cZh_UYBc_M1YfPlLjuJWmnRMDFLQEMsg4QklKsGfPYF2b9I7pQcs4ynLH");
+
+
+
+  }
+
+  private String getImageReply(String from,String to,String content) {
+    String mediaId = "";
+    switch(content) {
+      case DA_PI_MAO:
+        mediaId = "og9uZrJ4VLOt3kLhu_AuIDgU4_HTAnlBVDmIJXiXtaiEDlLrt7ZkpXnxN6l432YF";
+        break;
+      case CHAN_MAO:
+      case XIAO_CHAN_MAO:
+        mediaId = getRandomMediaId(mChanMaoMediaIdList);
+        break;
+      case PI_KA_MAO:
+        mediaId = "Uqr_FN07KQF_j-eLL1GCno8Ifulw8wybn1ZFts0A-ofOuXirx-gon5F7izi-BywM";     
+        break;
+      case XIAO_ZHU_ZHU :
+        mediaId = getRandomMediaId(mXiaoZhuZhuMediaIdList);
+        break;
+      default:
+        return "";                  
+    }
+    JSONObject reply = new JSONObject();
+    reply.put(FROM_USER_NAME, to);
+    reply.put(TO_USER_NAME, from);
+    reply.put(TIME, System.currentTimeMillis() / 1000);
+    reply.put(TYPE, "image");
+    JSONObject image = new JSONObject();
+    image.put(MEDIA_ID, mediaId);
+    reply.put(IMAGE, image);
+    logger.info("reply " + reply);
+    return reply.toString();
+  }
+
+  private String getRandomMediaId(List<String> list) {
+    Random random = new Random();
+    int index = random.nextInt(list.size());
+    return list.get(index);
   }
 }
