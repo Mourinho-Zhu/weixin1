@@ -2,12 +2,14 @@ package com.tencent.wxcloudrun.controller;
 
 import org.apache.ibatis.cache.decorators.WeakCache;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.tencent.wxcloudrun.config.ApiResponse;
 import com.tencent.wxcloudrun.dto.CounterRequest;
 import com.tencent.wxcloudrun.model.Counter;
+import com.tencent.wxcloudrun.model.ImageReplyBean;
 import com.tencent.wxcloudrun.service.CounterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -282,6 +284,7 @@ public class CounterController {
   private static final List<String> mDaPiMaoMediaIdList = new ArrayList<>();
   private static final List<String> mXiaoMaomiMediaIdList = new ArrayList<>();
   private static final List<String> mLanMaoMediaIdList = new ArrayList<>();
+  private static final List<ImageReplyBean> mDaChanZhuMediaIdList = new ArrayList<>();
 
   private static final String DA_PI_MAO = "大屁猫";
   private static final String CHAN_MAO = "馋猫";
@@ -291,6 +294,7 @@ public class CounterController {
   private static final String LAN_MAO = "懒猫";
   private static final String XIAO_ZHU_ZHU = "小猪猪";
   private static final String XIAO_MAO_MI = "小猫咪";
+  private static final String DA_CHAN_ZHU = "大馋猪";
 
   static {
     mImageKeywordList.add(DA_PI_MAO);
@@ -333,7 +337,8 @@ public class CounterController {
     mLanMaoMediaIdList.add("odIJHwiJ_nC4Sfu-aEU_k-cuLFmTAxAXMwAX57HVOcFXwOpRigqwesQVfvnQkMWC");
     mLanMaoMediaIdList.add("odIJHwiJ_nC4Sfu-aEU_kxROYlrxfMxEsbne9Udh4XcGSodXZhhI0AHSkxwG4hN_");
 
-
+    //大馋猪
+    mDaChanZhuMediaIdList.add(new ImageReplyBean("http://mmbiz.qpic.cn/sz_mmbiz_gif/t4K8ARPcgicUx3o11sjNzOGh18uQYgbQtLy8CBPoufaNCcYCYnjNyNQLz5pboIxYribQAxgGloqvbGBP5ic4GFONQ/0?wx_fmt=gif","好好吃"));
   }
 
   private String getImageReply(String from,String to,String content) {
@@ -359,7 +364,8 @@ public class CounterController {
       case XIAO_MAO_MI :
         mediaId = getRandomMediaId(mXiaoMaomiMediaIdList);
         break;
-
+      case DA_CHAN_ZHU:
+        return getImageReplyExtends(from,to,content);
       default:
         return "";                  
     }
@@ -376,6 +382,62 @@ public class CounterController {
   }
 
   private String getRandomMediaId(List<String> list) {
+    Random random = new Random();
+    int index = random.nextInt(list.size());
+    return list.get(index);
+  }
+
+  /**
+   * 
+   * {
+      "ToUserName": "用户OPENID",
+      "FromUserName": "公众号/小程序原始ID",
+      "CreateTime": "发送时间", // 整型，例如：1648014186
+      "MsgType": "news",
+      "ArticleCount": 2, // 图文消息个数；当用户发送文本、图片、语音、视频、图文、地理位置这六种消息时，开发者只能回复1条图文消息；其余场景最多可回复8条图文消息
+      "Articles": [{
+        "Title": "图文标题",
+        "Description": "图文描述",
+        "PicUrl": "图片链接", // 支持JPG、PNG格式，较好的效果为大图360*200，小图200*200
+        "Url":"点击图文消息跳转链接"
+      },{
+        "Title": "图文标题",
+        "Description": "图文描述",
+        "PicUrl": "图片链接", // 支持JPG、PNG格式，较好的效果为大图360*200，小图200*200
+        "Url":"点击图文消息跳转链接"
+      }]
+    }
+   */
+  private String getImageReplyExtends(String from,String to,String content) {
+    ImageReplyBean imageReplyBean = null;
+    switch(content) {
+      case DA_CHAN_ZHU:
+      imageReplyBean = getRandomImageReplyBean(mDaChanZhuMediaIdList);
+        break;
+
+      default:
+        return "";                  
+    }
+    if(null == imageReplyBean) return "";
+
+    JSONObject reply = new JSONObject();
+    reply.put(FROM_USER_NAME, to);
+    reply.put(TO_USER_NAME, from);
+    reply.put(TIME, System.currentTimeMillis() / 1000);
+    reply.put(TYPE, "news");
+    JSONArray imageArr = new JSONArray();
+    JSONObject image = new JSONObject();
+    image.put("Title", content);
+    image.put("Description", imageReplyBean.text);
+    image.put("PicUrl", imageReplyBean.url);
+    image.put("Url", "");
+    imageArr.put(image);
+    reply.put("Articles", imageArr);
+    logger.info("reply " + reply);
+    return reply.toString();
+  }
+
+  private ImageReplyBean getRandomImageReplyBean(List<ImageReplyBean> list) {
     Random random = new Random();
     int index = random.nextInt(list.size());
     return list.get(index);
