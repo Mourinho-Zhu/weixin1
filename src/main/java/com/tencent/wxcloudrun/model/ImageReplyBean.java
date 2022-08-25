@@ -1,11 +1,11 @@
 package com.tencent.wxcloudrun.model;
 
 public class ImageReplyBean {
-    public String mediaId;
+    public String url;
     public String text;
 
-    public ImageReplyBean(String mediaId,String text) {
-        this.mediaId = mediaId;
-        this.text = text;
+    public ImageReplyBean(String url,String text) {
+        this.url = url;
+        this.text = text; 
     }
 }
